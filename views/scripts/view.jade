@@ -1,0 +1,18 @@
+extends ../base
+
+block title
+  title Script
+
+block content
+  != messages()
+  h1 Script #{script.title}
+  form.form(method='POST', action='/script/save/#{script._id}')
+    include fields
+
+    input(type='submit', value='Save')
+
+
+
+
+
+

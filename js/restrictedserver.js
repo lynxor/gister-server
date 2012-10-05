@@ -48,7 +48,7 @@ var userIs = function (user) {
     return _(roles).any(function (x) {
         return (user && user.role && user.role.hasOwnProperty("name") && user.role.name === x);
     });
-    
+
 };
 
 
@@ -127,7 +127,7 @@ var auths = {
             req.flash("error", "Authentication failed");
         }
 
-        res.render('login.jade', function (err, template) {
+        res.render('login.jade', {attempts: 0}, function (err, template) {
             if (err) {
                 console.log(err.stack);
                 res.writeHead(500, {"Content-type":"text/html"});
@@ -160,32 +160,27 @@ var server = function (options) {
     passport.deserializeUser(function (id, done) {
         done(null, JSON.parse(id));
     });
-    var router = express.createServer();
+    var router = express();
     router.use(express.cookieParser());
     router.use(express.bodyParser());
     router.use(express.session({secret:"deadbeefdeadfeebfeebdead"}));
     router.use(passport.initialize());
     router.use(passport.session());
     router.use(express.errorHandler({ dumpExceptions:true, showStack:true }));
-    router.set('view options', { layout:false, asset_token: new Date().getTime() });
-    
-    router.dynamicHelpers({ messages:require('express-messages') });
+    router.use(require('connect-flash')());
+    router.set('view options', { layout:false, asset_token:new Date().getTime() });
 
     var AT = (new Date()).getTime();
-    router.dynamicHelpers({
-        user: function (req, res) {
-            return req.user;
-        },
-        admin: function (req, res) {
-            return req.hasOwnProperty("user") && req.user && userIs(req.user, "admin");
-        },
-        dsclient: function (req, res) {
-            return req.hasOwnProperty("user") && req.user &&  userIs(req.user, "client");
-        },
-        asset_token: function (req, res) {
-            return AT;
-        }
-
+    router.use(function (req, res, next) {
+        res.locals = {
+            user:req.user,
+            admin:req.hasOwnProperty("user") && req.user && userIs(req.user, "admin"),
+            dsclient:req.hasOwnProperty("user") && req.user && userIs(req.user, "client"),
+            asset_token:AT,
+            messages:require('express-messages')(req,res),
+            flash : req.flash.bind(req)
+        };
+        next();
     });
 
     router.post("/login", passport.authenticate("local", {failureRedirect:'/login/fail'}), function (req, res) {
@@ -217,7 +212,7 @@ var server = function (options) {
         res.end("<html>Failure: " + msg + "</html>");
     };
 
-    router.error(function (error, req, res, next) {
+    router.use(function (error, req, res, next) {
         if (error instanceof NotAuthenticated) {
             req.session.prevUrl = req.url;
             res.redirect("/login");
@@ -226,13 +221,13 @@ var server = function (options) {
         } else if (error instanceof NotFound) {
             res.render("errors/404.jade", {status:404});
         } else if (error instanceof Error) {
-            logger.error("Error occured: " +Error.toString(), {stack:error.stack,o:JSON.stringify(error)});
+            logger.error("Error occured: " + Error.toString(), {stack:error.stack, o:JSON.stringify(error)});
             console.log(error.stack);
             res.render("errors/500.jade", {status:500, error:error.toString()});
             //process.exit(1);
             //return next(error);
         } else {
-            logger.error("Error occured: " +Error.toString(), {stack:error.stack,o:JSON.stringify(error)});
+            logger.error("Error occured: " + Error.toString(), {stack:error.stack, o:JSON.stringify(error)});
             console.log("Non-error: " + error);
             res.render("errors/500.jade", {status:500, error:error.toString()});
         }
@@ -242,9 +237,9 @@ var server = function (options) {
     return {
         listen:function () {
             router.get("*", function (req, res) {
-                res.render("errors/404.jade",{status:404});
+                res.render("errors/404.jade", {status:404});
             });
-                //failure(req, res, error);
+            //failure(req, res, error);
             router.listen(o.port);
         }, //_.bind(router.listen, null, o.port),
         close:function () {

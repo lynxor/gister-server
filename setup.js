@@ -1,12 +1,11 @@
 var _ = require("underscore"),
     mongojs = require("mongojs"),
-    promise = require("node-promise"),
     UserProvider = require("./js/db/user_provider.js").UserProvider,
     dbCollections = ["user"],
     moment = require("moment"),
     async = require("async"),
     options = {
-        dbUrl:"localhost:27017/template",
+        dbUrl:"localhost:27017/gister",
         dbCollections:dbCollections,
         roles:["supervisor", "admin"]
     },

@@ -10,6 +10,7 @@ var restrictedServer = require("./restrictedserver.js"),
     providers = require("./providers.js"),
     jade = require("jade"),
     winston = require("winston"),
+    scripts = require("./scripts.js"),
     async = require("async"),
     mail_config = JSON.parse(fs.readFileSync("./conf/mailer.json")),
     Mailer = require("./mailer.js").Mailer;
@@ -70,6 +71,8 @@ module.exports = function (o, done) {
 
         //user routes
         users.on(providers, options.mailer)(router);
+
+        scripts.on(database, providers)(router);
 
         done(router, database, providers, {
             mailer:options.mailer,

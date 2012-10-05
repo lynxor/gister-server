@@ -1,0 +1,25 @@
+extends ../base
+
+block title
+  title Scripts
+
+block content
+  != messages()
+  h1 Scripts
+  table.table.table-bordered
+    tr
+      th id
+      th title
+      th description
+      th url
+      th exec script
+    each script in scripts
+      tr
+        td
+         a(href='/script/#{script._id}')= script._id
+        td= script.title
+        td= script.description
+        td= script.url
+        td= script.exec
+
+

@@ -1,0 +1,11 @@
+label Title
+input(type='text', value='#{script.title}', name='script[title]')
+
+label URL
+input(type='text', value='#{script.url}', name='script[url]')
+
+label description
+input(type='text', value='#{script.description}', name='script[description]')
+
+label exec
+textarea(name='script[exec]')= script.exec
