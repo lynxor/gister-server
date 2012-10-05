@@ -9,3 +9,6 @@ input(type='text', value='#{script.description}', name='script[description]')
 
 label exec
 textarea(name='script[exec]')= script.exec
+
+label tags
+input(type='text', value='#{script.tags? script.tags.join(",") : "" }', name='script[tags]')

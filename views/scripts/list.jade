@@ -6,6 +6,11 @@ block title
 block content
   != messages()
   h1 Scripts
+
+  form.form-search
+    input#keyword(type='text')
+    input#search_button(type='button', value='Search')
+
   table.table.table-bordered
     tr
       th id
@@ -22,4 +27,9 @@ block content
         td= script.url
         td= script.exec
 
-
+  script(type='text/javascript')
+    $(document).ready(function(){
+        $("#search_button").click(function(){
+            window.location.pathname = "/scripts/search/" + $("#keyword").val();
+        });
+    });

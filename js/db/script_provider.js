@@ -16,11 +16,17 @@ var ScriptProvider = function (db) {
         update:function (scriptId, script, callback) {
             db.script.update({_id: new ObjectID(scriptId)}, {$set:script}, callback);
         },
+        search : function(keyword, callback){
+          var regex = new RegExp(".*"+keyword.split(/\s/).join(".*") + ".*", "i"),
+              query = {$or: [{title: regex}, {description: regex}, {tags: regex}]};
+
+            db.script.find(query, callback);
+        },
         remove:function (query, callback) {
             db.script.remove(query, callback);
         },
         emptyscript:function () {
-            return {url:"", title:"", description:"", exec: "bash $SCRIPT $@"};
+            return {url:"", title:"", description:"", exec: "bash $SCRIPT $@", tags: []};
         }
     };
 };
