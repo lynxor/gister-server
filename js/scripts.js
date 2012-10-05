@@ -9,6 +9,11 @@ exports.on = function (db, providers) {
                 res.render("scripts/list.jade", {scripts:docs});
             });
         },
+        jsonList = function(req, res){
+            db.script.find({}, function (err, docs) {
+                res.json({scripts: docs});
+            });
+        },
         view = function (req, res) {
             scriptProvider.retrieveById(req.params.scriptId, function(err, script){
                 res.render("scripts/view.jade", {script: script});
@@ -16,7 +21,7 @@ exports.on = function (db, providers) {
         },
         jsonScript = function (req, res) {
             scriptProvider.retrieveById(req.params.scriptId, function(err, script){
-                res.json(script);
+                res.json({script: script});
             });
         },
         add = function(req, res){
@@ -48,6 +53,7 @@ exports.on = function (db, providers) {
     return function (router) {
         router.get("/", function(req, res){res.redirect("/scripts/all");});
         router.get("/scripts/all", showAll);
+        router.get("/scripts/json", jsonList);
         router.get("/script/new", add);
         router.get("/script/:scriptId", view);
         router.get("/script/json/:scriptId", jsonScript);
