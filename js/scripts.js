@@ -14,6 +14,11 @@ exports.on = function (db, providers) {
                 res.render("scripts/view.jade", {script: script});
             });
         },
+        jsonScript = function (req, res) {
+            scriptProvider.retrieveById(req.params.scriptId, function(err, script){
+                res.json(script);
+            });
+        },
         add = function(req, res){
             res.render("scripts/add.jade", {script: scriptProvider.emptyscript()});
         },
@@ -45,6 +50,7 @@ exports.on = function (db, providers) {
         router.get("/scripts/all", showAll);
         router.get("/script/new", add);
         router.get("/script/:scriptId", view);
+        router.get("/script/json/:scriptId", jsonScript);
         router.post("/script/new", saveNew);
         router.post("/script/save/:scriptId", save);
     };
