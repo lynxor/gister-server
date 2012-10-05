@@ -20,7 +20,8 @@
         "inotify":"*",
         "winston":"*",
         "cron" : "*",
-        "mocha" : "*"
+        "mocha" : "*",
+	"connect-flash":"*"
 
     },
     "devDependencies":{
