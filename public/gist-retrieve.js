@@ -7,7 +7,7 @@ $(function () {
 
 
 function retrieveGistMeta() {
-    var gistId = $("#gist_id").val();
+    var gistId = ( $("#gist_id").val() ).trim();
 
     if (!gistId || gistId.trim() === "") {
         alert("Please provide a gist id");

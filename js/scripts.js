@@ -68,7 +68,7 @@ exports.on = function (db, providers) {
                     req.params.scriptId = docs[0]._id.toString();
                     view(req, res);
                 } else {
-                    req.flash("error", "Could not save");
+                    req.flash("error", "Could not save - " + err);
                     res.redirect('/scripts/all');
                 }
             });
