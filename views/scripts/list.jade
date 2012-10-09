@@ -30,6 +30,9 @@ block content
   script(type='text/javascript')
     $(document).ready(function(){
         $("#search_button").click(function(){
-            window.location.pathname = "/scripts/search/" + $("#keyword").val();
+            var kw = $("#keyword").val();
+            if(kw && kw.trim() !== ""){
+              window.location.pathname = "/scripts/search/" + $("#keyword").val();
+            }
         });
     });

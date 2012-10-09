@@ -1,14 +1,20 @@
 label Title
-input(type='text', value='#{script.title}', name='script[title]')
+input#title(type='text', value='#{script.title}', name='script[title]')
 
-label URL
-input(type='text', value='#{script.url}', name='script[url]')
+label URL(raw)
+input#url(type='text', value='#{script.url}', name='script[url]')
 
 label description
-input(type='text', value='#{script.description}', name='script[description]')
+input#description(type='text', value='#{script.description}', name='script[description]')
 
 label exec
-textarea(name='script[exec]')= script.exec
+textarea#exec(name='script[exec]')= script.exec
 
 label tags
-input(type='text', value='#{script.tags? script.tags.join(",") : "" }', name='script[tags]')
+input#tags(type='text', value='#{script.tags? script.tags.join(",") : "" }', name='script[tags]')
+
+label author
+input#author(type='text', value='#{script.author? script.author : ""}', name='script[author]')
+
+label html url
+input#html_url(type='text', value='#{script.html_url? script.html_url : ""}', name='script[html_url]')

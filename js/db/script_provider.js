@@ -3,6 +3,14 @@ var ObjectID = require('mongodb').ObjectID,
     async = require("async");
 
 var ScriptProvider = function (db) {
+
+    db.script.createIndex({url: 1}, {unique: true, dropDups: true}, function(err, docs){
+        if (err) {
+            console.log("Could not create indexes - " + err);
+        } else {
+            console.log("Created index on url successfully");
+        }
+    });
     return {
         retrieveAll:function (callback) {
             db.script.find(callback);

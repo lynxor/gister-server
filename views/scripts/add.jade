@@ -3,17 +3,16 @@ extends ../base
 block title
   title Script
 
+
+
 block content
   != messages()
+  #message
   h1 New Script
+
   form.form(method='POST', action='/script/new')
     include fields
 
     input(type='submit', value='submit')
-
-
-
-
-
-
-)
+  script(src='/public#{asset_token}/gist-retrieve.js', type='text/javascript')
+  include gist
