@@ -44,6 +44,11 @@ exports.on = function (db, providers) {
                 res.json({script:script});
             });
         },
+        scriptByCommand = function(req, res){
+          scriptProvider.retrieveByCommand(req.params.command, function(err, script){
+              res.json({script: script});
+          });
+        },
         add = function (req, res) {
             res.render("scripts/add.jade", {script:scriptProvider.emptyscript()});
         },
@@ -85,6 +90,7 @@ exports.on = function (db, providers) {
         router.get("/script/new", add);
         router.get("/script/:scriptId", view);
         router.get("/script/json/:scriptId", jsonScript);
+        router.get("/script/json/command/:command", scriptByCommand)
         router.post("/script/new", saveNew);
         router.post("/script/save/:scriptId", save);
     };

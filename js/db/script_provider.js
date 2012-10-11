@@ -4,19 +4,31 @@ var ObjectID = require('mongodb').ObjectID,
 
 var ScriptProvider = function (db) {
 
-    db.script.createIndex({url: 1}, {unique: true, dropDups: true}, function(err, docs){
+    db.script.createIndex({url: 1, command: 1}, {unique: true, dropDups: true}, function(err, docs){
         if (err) {
             console.log("Could not create indexes - " + err);
         } else {
             console.log("Created index on url successfully");
         }
     });
+
+//    db.script.createIndex({command: 1}, {unique: true, dropDups: true}, function(err, docs){
+//        if (err) {
+//            console.log("Could not create index for command - " + err);
+//        } else {
+//            console.log("Created index on command successfully");
+//        }
+//    });
+
     return {
         retrieveAll:function (callback) {
             db.script.find(callback);
         },
         retrieveById:function (id, callback) {
             db.script.findOne({_id:new ObjectID(id)}, callback);
+        },
+        retrieveByCommand: function(command, callback){
+          db.script.findOne({command: command}, callback);
         },
         insert:function (script, callback) {
             db.script.insert(script, callback);
@@ -34,7 +46,7 @@ var ScriptProvider = function (db) {
             db.script.remove(query, callback);
         },
         emptyscript:function () {
-            return {url:"", title:"", description:"", exec: "bash $SCRIPT $@", tags: []};
+            return {url:"", command: "", title:"", description:"", exec: "bash $SCRIPT $@", tags: []};
         }
     };
 };

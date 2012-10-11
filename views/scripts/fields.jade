@@ -1,11 +1,14 @@
 label Title
 input#title(type='text', value='#{script.title}', name='script[title]')
 
+label Command name
+input#command(type='text', value='#{script.command}', name='script[command]', title="What your script will be named")
+
 label URL(raw)
 input#url(type='text', value='#{script.url}', name='script[url]')
 
 label description
-input#description(type='text', value='#{script.description}', name='script[description]')
+textarea#description(name='script[description]')= script.description
 
 label exec
 textarea#exec(name='script[exec]')= script.exec
