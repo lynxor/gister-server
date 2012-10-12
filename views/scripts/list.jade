@@ -18,6 +18,7 @@ block content
       th description
       th url
       th exec script
+      th actions
     each script in scripts
       tr
         td
@@ -26,6 +27,8 @@ block content
         td= script.description
         td= script.url
         td= script.exec
+        td
+          a(href='/script/remove/#{script._id}') Remove
 
   script(type='text/javascript')
     $(document).ready(function(){

@@ -18,6 +18,9 @@ function retrieveGistMeta() {
 
     $.ajax({
         url:url,
+        crossDomain : true,
+        type: "GET",
+        dataType: "json",
         success:function (data, textStatus, jqXHR) {
             if (data) {
                 //for now, just the first file

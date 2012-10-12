@@ -77,6 +77,11 @@ exports.on = function (db, providers) {
                     res.redirect('/scripts/all');
                 }
             });
+        },
+        remove = function(req, res){
+            scriptProvider.remove(req.params.scriptId, function(err, docs){
+                res.redirect('/scripts/all');
+            });
         };
 
     return function (router) {
@@ -90,7 +95,9 @@ exports.on = function (db, providers) {
         router.get("/script/new", add);
         router.get("/script/:scriptId", view);
         router.get("/script/json/:scriptId", jsonScript);
-        router.get("/script/json/command/:command", scriptByCommand)
+        router.get("/script/json/command/:command", scriptByCommand);
+        router.get("/script/remove/:scriptId", remove);
+
         router.post("/script/new", saveNew);
         router.post("/script/save/:scriptId", save);
     };

@@ -42,11 +42,15 @@ var ScriptProvider = function (db) {
 
             db.script.find(query, callback);
         },
-        remove:function (query, callback) {
-            db.script.remove(query, callback);
+        remove:function (scriptId, callback) {
+            try{
+                db.script.remove({_id: new ObjectID(scriptId)}, callback);
+            } catch(e){
+                callback(e);
+            }
         },
         emptyscript:function () {
-            return {url:"", command: "", title:"", description:"", exec: "bash $SCRIPT $@", tags: []};
+            return {url:"", command: "", title:"", description:"", exec: "bash $SCRIPT", tags: []};
         }
     };
 };
